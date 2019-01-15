@@ -10,29 +10,41 @@ import java.util.List;
 import java.util.Scanner;
 
 import br.com.caelum.casadocodigo.converter.LivroConverter;
+import br.com.caelum.casadocodigo.converter.LivroServiceConverterFactory;
+import br.com.caelum.casadocodigo.delegate.RequisicaoDelegate;
 import br.com.caelum.casadocodigo.modelo.Livro;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class WebClient {
-    public List<Livro> fazRequisicao() {
-        try {
-            URL url = new URL("https://cdcmob.herokuapp.com/listarLivros?indicePrimeiroLivro=0&qtdLivros=20");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+    private RequisicaoDelegate delegate;
 
-            connection.connect();
+    public WebClient(RequisicaoDelegate delegate) {
+        this.delegate = delegate;
+    }
 
-            String resposta = new Scanner(connection.getInputStream()).useDelimiter("\n").next();
-            //converte de json pra lista de livros
-            List<Livro> livros = new LivroConverter().fromJson(resposta);
+    public void pegaLivros() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://cdcmob.herokuapp.com/")
+                .addConverterFactory(new LivroServiceConverterFactory())
+                .build();
 
-            Log.i("LIVROS", resposta);
-            return livros;
+        LivroService livroService = retrofit.create(LivroService.class);
+        Call<List<Livro>> call = livroService.listaLivros();
+        call.enqueue(new Callback<List<Livro>>() {
+            @Override
+            public void onResponse(Call<List<Livro>> call, Response<List<Livro>> response) {
+                List<Livro> livros = response.body();
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+                delegate.lidaComSucesso(livros);
+            }
+
+            @Override
+            public void onFailure(Call<List<Livro>> call, Throwable t) {
+                delegate.lidaComErro(t);
+            }
+        });
     }
 }
