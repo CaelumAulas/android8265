@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import br.com.caelum.casadocodigo.R;
 import br.com.caelum.casadocodigo.modelo.Livro;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class LivroAdapterRecyclerView extends RecyclerView.Adapter {
     private ArrayList<Livro> livros;
@@ -20,11 +22,23 @@ public class LivroAdapterRecyclerView extends RecyclerView.Adapter {
         this.livros = livros;
     }
 
+
+    @Override
+    public int getItemViewType(int posicao) {
+        return posicao % 2; //retorna 0 ou 1
+    }
+
+
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup pai, int posicao) {
-
-        View viewItem = LayoutInflater.from(pai.getContext()).inflate(R.layout.item_livro_impar, pai, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup pai, int tipoDaView) {
+        int tipoDoLayout;
+        if (tipoDaView == 0) {
+            tipoDoLayout = R.layout.item_livro_par;
+        } else {
+            tipoDoLayout = R.layout.item_livro_impar;
+        }
+        View viewItem = LayoutInflater.from(pai.getContext()).inflate(tipoDoLayout, pai, false);
         return new ListaLivroViewHolder(viewItem);
     }
 
@@ -41,16 +55,15 @@ public class LivroAdapterRecyclerView extends RecyclerView.Adapter {
         return livros.size();
     }
 
+    class ListaLivroViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.item_livro_nome) TextView campoNome;
+        @BindView(R.id.item_livro_foto) ImageView campoFoto;
 
-    private class ListaLivroViewHolder extends RecyclerView.ViewHolder {
-        private TextView campoNome;
-        private ImageView campoFoto;
-
-        public ListaLivroViewHolder(@NonNull View itemView) {
+        public ListaLivroViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            campoNome = itemView.findViewById(R.id.item_livro_nome);
-            campoFoto = itemView.findViewById(R.id.item_livro_foto);
+            ButterKnife.bind(this,itemView);
+
         }
     }
 }
