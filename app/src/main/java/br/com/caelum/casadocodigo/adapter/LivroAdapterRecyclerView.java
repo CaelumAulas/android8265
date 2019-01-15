@@ -9,16 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.caelum.casadocodigo.R;
+import br.com.caelum.casadocodigo.delegate.LivroDelegate;
 import br.com.caelum.casadocodigo.modelo.Livro;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LivroAdapterRecyclerView extends RecyclerView.Adapter {
-    private ArrayList<Livro> livros;
+    private List<Livro> livros;
 
-    public LivroAdapterRecyclerView(ArrayList<Livro> livros) {
+    public LivroAdapterRecyclerView(List<Livro> livros) {
         this.livros = livros;
     }
 
@@ -62,8 +65,15 @@ public class LivroAdapterRecyclerView extends RecyclerView.Adapter {
         public ListaLivroViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            ButterKnife.bind(this,itemView);
-
+            ButterKnife.bind(this, itemView);
         }
+
+        @OnClick(R.id.item_livro)
+        public void cliqueNoItem() {
+            Livro livro = livros.get(getAdapterPosition());
+            LivroDelegate delegate = (LivroDelegate) itemView.getContext();
+            delegate.lidaComClique(livro);
+        }
+
     }
 }
