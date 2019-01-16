@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.Serializable;
 
 import br.com.caelum.casadocodigo.R;
@@ -48,6 +50,13 @@ public class DetalhesLivroFragment extends Fragment {
     }
 
     private void populaCamposCom(Livro livro) {
+        Picasso.get()
+                .load(livro.getUrlFoto())
+                .placeholder(R.drawable.livro)
+                .fit()
+                .into(campoFoto);
+
+
         campoNome.setText(livro.getNome());
 
         String autoresTexto = "";
