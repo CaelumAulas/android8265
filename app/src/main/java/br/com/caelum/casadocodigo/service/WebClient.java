@@ -21,14 +21,14 @@ public class WebClient {
         this.contexto = contexto;
     }
 
-    public void pegaLivros() {
+    public void pegaLivros(int indicePrimeiroLivro, int qtdLivros) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://cdcmob.herokuapp.com/")
                 .addConverterFactory(new LivroServiceConverterFactory())
                 .build();
 
         LivroService livroService = retrofit.create(LivroService.class);
-        Call<List<Livro>> call = livroService.listaLivros();
+        Call<List<Livro>> call = livroService.listaLivros(indicePrimeiroLivro, qtdLivros);
         call.enqueue(new Callback<List<Livro>>() {
             @Override
             public void onResponse(Call<List<Livro>> call, Response<List<Livro>> response) {

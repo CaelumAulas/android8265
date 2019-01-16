@@ -6,18 +6,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.caelum.casadocodigo.R;
 import br.com.caelum.casadocodigo.adapter.LivroAdapterRecyclerView;
-import br.com.caelum.casadocodigo.modelo.Autor;
+import br.com.caelum.casadocodigo.listener.MeuScrollListener;
 import br.com.caelum.casadocodigo.modelo.Livro;
+import br.com.caelum.casadocodigo.service.WebClient;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -34,12 +35,14 @@ public class ListaLivrosFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new LivroAdapterRecyclerView(livros));
 
+        recyclerView.addOnScrollListener(new MeuScrollListener());
+
         return view;
     }
 
     public void populaLista(List<Livro> livros) {
-        this.livros.clear();
         this.livros.addAll(livros);
+        Log.i("LIVROS", String.valueOf(this.livros.size()));
         this.recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

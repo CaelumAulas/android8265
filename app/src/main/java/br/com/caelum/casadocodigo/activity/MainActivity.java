@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements LivroDelegate {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new WebClient(this).pegaLivros();
+        new WebClient(this).pegaLivros(0,5);
 
         EventBus.getDefault().register(this);
 
