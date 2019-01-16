@@ -1,11 +1,15 @@
 package br.com.caelum.casadocodigo.service;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,10 +23,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class WebClient {
-    private RequisicaoDelegate delegate;
 
-    public WebClient(RequisicaoDelegate delegate) {
-        this.delegate = delegate;
+    private Context contexto;
+
+    public WebClient(Context contexto) {
+        this.contexto = contexto;
     }
 
     public void pegaLivros() {
@@ -37,13 +42,22 @@ public class WebClient {
             @Override
             public void onResponse(Call<List<Livro>> call, Response<List<Livro>> response) {
                 List<Livro> livros = response.body();
+                //avisa que deu certo -> dispara evento (broadcast)
 
-                delegate.lidaComSucesso(livros);
+                Intent intent = new Intent("minha ação de requisição");
+                intent.putExtra("deuCerto", true);
+                intent.putExtra("livros", (ArrayList<Livro>) livros);
+                LocalBroadcastManager.getInstance(contexto).sendBroadcast(intent);
             }
 
             @Override
             public void onFailure(Call<List<Livro>> call, Throwable t) {
-                delegate.lidaComErro(t);
+                //avisa que deu ruim -> dispara evento (broadcast)
+
+                Intent intent = new Intent("minha ação de requisição");
+                intent.putExtra("deuCerto", false);
+                intent.putExtra("erro",t);
+                LocalBroadcastManager.getInstance(contexto).sendBroadcast(intent);
             }
         });
     }
