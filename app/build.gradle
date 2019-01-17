@@ -35,4 +35,13 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.google.dagger:dagger:2.21'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }
