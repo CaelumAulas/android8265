@@ -11,9 +11,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.RemoteMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -100,4 +102,8 @@ public class MainActivity extends AppCompatActivity implements LivroDelegate {
         Log.i("EXCEÇAO", event.getThrowable().getMessage());
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void recebeNotificacao(RemoteMessage remoteMessage) {
+        Toast.makeText(this, "Recebeu notificação : "+remoteMessage.getNotification().getBody(),Toast.LENGTH_LONG).show();
+    }
 }
