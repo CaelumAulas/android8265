@@ -1,10 +1,13 @@
 package br.com.caelum.casadocodigo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +50,22 @@ public class MainActivity extends AppCompatActivity implements LivroDelegate {
         super.onDestroy();
         EventBus eventBus = EventBus.getDefault();
         eventBus.unregister(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.item_carrinho) {
+            Intent intent = new Intent(this, CarrinhoActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
     public void lidaComClique(Livro livro) {

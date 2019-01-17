@@ -25,4 +25,14 @@ public class Carrinho implements Serializable {
         return Collections.unmodifiableList(itens);
     }
 
+    public double getValorTotal() {
+        double soma = 0;
+        for (Item item : itens) {
+            soma += item.getValor();
+        }
+        return soma;
+    }
+
+
+
 }
